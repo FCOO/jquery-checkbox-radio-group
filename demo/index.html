@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="da" style="font-size: 100%">
+<head>
+	<title>fcoo.dk - jquery-checkbox-radio-group - Demo</title>
+	<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta http-equiv='x-dns-prefetch-control' content='on'>
+
+	<meta name='copyright' content='FCOO'>
+	<meta name='owner' content='FCOO'>
+    <style>
+        div {
+            cursor: pointer;
+        }
+        .i_am_selected {
+            background-color: blue;
+            color: white;
+        }
+        .i_am_semi_selected {
+            background-color: yellow;
+
+        }
+    </style>
+</head>
+
+<body>
+    <input type="checkbox" id="test" name="vehicle" value="Bike">Checkbox id=test</input><br>
+    <input type="checkbox" id="test2"  name="vehicle" value="Car">Checkbox id=test2</input>
+    <hr>
+	<div class="test1">This is the first div</div>
+	<div class="test1">This is the second div</div>
+    <hr>
+    <div id="parent">I am the parent</div>        
+    <div id="container">
+    	<div id="no1">1</div>        
+    	<div id="no2">2</div>        
+    	<div id="no3">3</div>        
+    	<div id="no4">4</div>        
+    	<div id="no5">5</div>        
+    	<div id="no6">6</div>        
+    	<span id="no7">7 (special)</span>        
+    </div>
+    <hr>
+    <div id="radioGroup">
+        <input type="radio" id="radio1" name="radio"/><label for="radio1">Radio id=radio1</label><br>
+        <input type="radio" id="radio2" name="radio"/><label for="radio2">Radio id=radio1</label><br>
+        <div id="radio3">Radio id=radio3</div>        
+        <div id="radio4">Radio id=radio4</div>        
+        <div id="radio5">Radio id=radio5 (special)</div>        
+    </div>
+
+	<script src="bower_components.js"></script>
+	<script src="../src/jquery-checkbox-radio-group.js"></script>
+	<script>
+
+        $('#test, #test2').checkbox({
+            selected:true, onChange: function(id, selected){ console.log(id,':',selected)}
+        });
+
+        $('.test1').checkbox({
+            className: 'i_am_selected',
+            onChange: function(id, selected){ console.log(id+':'+selected)}
+        });
+        $('#parent')
+            .checkboxGroup({
+                className     : 'i_am_selected',
+                className_semi: 'i_am_semi_selected',
+                onChange      : function(id, selected){ console.log(id,':',selected)}
+            })
+            .addElement( $('#container'), 'div')
+            .addElement( $('#no7'), {
+                onChange: function(id, selected){ console.log('I an special!', id,':',selected) }
+            });
+
+        var radioGroup = $.radioGroup({
+            radioGroupId: 'myRadioGroup', className: 'i_am_selected', prop:'checked', allowZeroSelected: true, selectedId: 'radio3', 
+            onChange: function(id, selected, $radio, groupId ){ console.log(groupId+':'+id+'=>'+selected); }
+        }); 
+        radioGroup
+            .addElement( $('input[type="radio"], #radio3, #radio4') )
+            .addElement( $('#radio5'), {
+                onChange: function(id, selected){ console.log('I an special!', id,':',selected) }
+            });
+
+    
+
+    </script>
+</body>
+</html>
