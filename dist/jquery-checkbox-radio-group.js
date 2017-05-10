@@ -1,16 +1,16 @@
 /****************************************************************************
-	jquery-checkbox-radio-group.js, 
+    jquery-checkbox-radio-group.js, 
 
-	(c) 2017, FCOO
+    (c) 2017, FCOO
 
-	https://github.com/FCOO/jquery-checkbox-radio-group
-	https://github.com/FCOO
+    https://github.com/FCOO/jquery-checkbox-radio-group
+    https://github.com/FCOO
 
 ****************************************************************************/
 
 (function ($/*, window, document, undefined*/) {
-	"use strict";
-	
+    "use strict";
+    
     var globalCheckboxId = 0;
 
     $.fn.extend({
@@ -25,7 +25,7 @@
             onChange = function( id, selected, $checkbox )
         ***********************************************************/
         checkbox: function( options ){
-    		return this.each(function() {        
+            return this.each(function() {        
                 var $this = $(this),
                     _options = $.extend({
                         id      : options.id || $this.prop('id') || globalCheckboxId++,
@@ -131,8 +131,8 @@
     }
 
     /***********************************************************
-	$.fn.checkboxGroup( options )
-	The input acts as checkbox for a group of checkbokes (=parent). 
+    $.fn.checkboxGroup( options )
+    The input acts as checkbox for a group of checkbokes (=parent). 
     The state of the input is updated when any of the child-input are changed 
     and all the child can be changed by clicking the input
     options:
@@ -173,13 +173,13 @@
         //$.fn._cbxgUpdateParent = Update the state of the parent-checkbox
         _cbxgUpdateParent: function(){
             //Count the number of checked and unchecked children
-    		var childSelected = 0,
+            var childSelected = 0,
                 childUnselected = 0;
             $.each( this._cbxChildList, function( index, $child ){
-    				if ($child._cbxGet())
-    					childSelected++;
-    				else
-    					childUnselected++;
+                if ($child._cbxGet())
+                    childSelected++;
+                else
+                    childUnselected++;
             });
             //Update selected and semi-selectd state
             this._cbxSet( childSelected == this._cbxChildList.length, true );
@@ -213,7 +213,7 @@
     
     
     /***********************************************************
-	$.radioGroup( options )
+    $.radioGroup( options )
     options:
         selector: Same as for $.fn.checkbox
         prop, className, selected, onChange: Same as for $.fn.checkbox. Used as default for child-radio-elements
@@ -221,22 +221,22 @@
         selectedId: The id of the select element
         allowZeroSelected: If true the radio-buttons can be deselected
     ***********************************************************/
-	$.RadioGroup = function( options ) {
-		this.options = $.extend({
-			//Default options
+    $.RadioGroup = function( options ) {
+        this.options = $.extend({
+            //Default options
             className        : '',
             prop             : 'checked',
             allowZeroSelected: false,
             onChange         : function(){}
         }, options || {} );
         this.defaultChildOptions = $.extend({}, this.options );
-	};
+    };
   
-	//Extend the prototype
-	$.RadioGroup.prototype = {
+    //Extend the prototype
+    $.RadioGroup.prototype = {
 
-		//addElement
-		addElement: function(){
+        //addElement
+        addElement: function(){
             var firstIndex = this._cbxChildList ? this._cbxChildList.length : 0;
             _addElement.apply( this, arguments );     
 
@@ -259,13 +259,13 @@
             }
 
             return this;
-		},
+        },
 
-		//removeElement
-		removeElement: function(/*$element, remove*/){
+        //removeElement
+        removeElement: function(/*$element, remove*/){
             _removeElement.apply( this, arguments );     
             return this;
-		},
+        },
         
         //
         onChange: function(id, selected){
@@ -292,20 +292,20 @@
                 $child._cbxSet( true, true );
         }
 
-	};
+    };
 
     $.radioGroup = function( options ){
         return new $.RadioGroup( options );
     };
 
-	/******************************************
-	Initialize/ready 
-	*******************************************/
-	$(function() { 
+    /******************************************
+    Initialize/ready 
+    *******************************************/
+    $(function() { 
 
-	
-	}); //End of initialize/ready
-	//******************************************
+    
+    }); //End of initialize/ready
+    //******************************************
 
 
 
