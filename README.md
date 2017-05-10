@@ -40,8 +40,9 @@ http://FCOO.github.io/jquery-checkbox-radio-group/demo/
 The function `onChange` is called (with optional context = `options.context`) when a element is selected or deselected
  `onChange` can be set in `options` for `$.fn.checkboxGroup( options )` and `$.radioGroup( options )` and/or individual in `options` in `addElement(.., options)` 
 
-#### `options.className` and `options.prop`
+#### `options.className` and `options.prop` and `options.modernizr`
 When a element is selected it will get added class-name `options.className` and/or have property `options.prop` set to `true`. E.g. `<input type="checkbox">` will have `options.prop: "checked"` while Bootstrap buttons would have `options.className: "active"`
+When a element is unselected the `options.className` is removed. If `options.modernizr: true` the class-name `"no-"+options.className` is added to 
 As for `options.onChange` these options can be set *globally* in `$.fn.checkboxGroup(...) / $.radioGroup(...)` and/or individual in `addElement(...)` 
 
 

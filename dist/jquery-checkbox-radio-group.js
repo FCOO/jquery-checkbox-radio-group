@@ -18,9 +18,10 @@
         $.fn.checkbox( options )
         options:
             id         (default: id of element or auto-created)
-            prop       (default 'checked')  Property set when the eleemnt is selected
-            className  (default: '')        Class-name set when the eleemnt is selected      
-            selector   (default: null)      Selector for child-element to be updated with prop and/or className
+            prop       (default '')     Property set when the eleemnt is selected
+            className  (default: '')    Class-name set when the eleemnt is selected      
+            selector   (default: null)  Selector for child-element to be updated with prop and/or className
+            modernizr  (default; false) If true the element get "no-"+className when unselected
             selected   (default: false)
             onChange = function( id, selected, $checkbox )
         ***********************************************************/
@@ -28,10 +29,13 @@
             return this.each(function() {        
                 var $this = $(this),
                     _options = $.extend({
-                        id      : options.id || $this.prop('id') || globalCheckboxId++,
-                        prop    : 'checked',
-                        selected: false,
-                        onChange: function(){}
+                        id       : options.id || $this.prop('id') || globalCheckboxId++,
+                        prop     : '',
+                        className: '',
+                        selector : null,
+                        modernizr: false,
+                        selected : false,
+                        onChange : function(){}
                     }, options);
                 $this.data('cbx_options', _options );
                 $this._cbxSet( _options.selected, true );
@@ -54,8 +58,14 @@
                 var $this = $(this);
                 if (options.prop)
                     $this.prop(options.prop, options.selected);
-                if (options.className)
-                    $this.toggleClass(options.className, options.selected);
+
+                if (options.className){
+                    if (options.modernizr)
+                        $this.modernizrToggle(options.className, options.selected); 
+                    else
+                        $this.toggleClass(options.className, options.selected);
+                }
+
             });
 
             if (!dontCallOnChange)
@@ -136,7 +146,7 @@
     The state of the input is updated when any of the child-input are changed 
     and all the child can be changed by clicking the input
     options:
-        prop, className, selector: Same as for $.fn.checkbox. Also used as default for child-checkboxes
+        prop, className, modernizr, selector: Same as for $.fn.checkbox. Also used as default for child-checkboxes
         selected, onChange: Same as for $.fn.checkbox but only used as default for child-checkboxes
         prop_semi, className_semi: Same as for $.fn.checkbox but for the semi-selected start where selected children > 0 and < total items        
     ***********************************************************/
@@ -188,8 +198,12 @@
 
             if (options.prop_semi)
                 this.prop(options.prop_semi, semiSelected);
-            if (options.className_semi)
-                this.toggleClass(options.className_semi, semiSelected);
+            if (options.className_semi){
+                if (options.modernizr)
+                    this.modernizrToggle(options.className_semi, semiSelected); 
+                else
+                    this.toggleClass(options.className_semi, semiSelected);
+            }
         },
 
         //$.fn._cbxgOnClickParent = Click on parent 
