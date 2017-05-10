@@ -11,74 +11,76 @@
 (function ($/*, window, document, undefined*/) {
 	"use strict";
 	
-    /***********************************************************
-    $.fn.checkbox( options )
-    options:
-        id         (default: id of element or auto-created)
-        prop       (default 'checked')  Property set when the eleemnt is selected
-        className  (default: '')        Class-name set when the eleemnt is selected      
-        selector   (default: null)      Selector for child-element to be updated with prop and/or className
-        selected   (default: false)
-        onChange = function( id, selected, $checkbox )
-
-    ***********************************************************/
     var globalCheckboxId = 0;
-    $.fn.checkbox = function( options ){
-		return this.each(function() {        
-            var $this = $(this),
-                _options = $.extend({
-                    id      : options.id || $this.prop('id') || globalCheckboxId++,
-                    prop    : 'checked',
-                    selected: false,
-                    onChange: function(){}
-                }, options);
-            $this.data('cbx_options', _options );
-            $this._cbxSet( _options.selected, true );
-            $this.on('click', $.proxy( $this._cbxOnClick, $this ));
-    
-        });
-    };
 
-    //Internal methods. All prefixed with _cbx
-    $.fn._cbxGet = function(){
-        return this.data('cbx_options').selected;
-    };
+    $.fn.extend({
+        /***********************************************************
+        $.fn.checkbox( options )
+        options:
+            id         (default: id of element or auto-created)
+            prop       (default 'checked')  Property set when the eleemnt is selected
+            className  (default: '')        Class-name set when the eleemnt is selected      
+            selector   (default: null)      Selector for child-element to be updated with prop and/or className
+            selected   (default: false)
+            onChange = function( id, selected, $checkbox )
+        ***********************************************************/
+        checkbox: function( options ){
+    		return this.each(function() {        
+                var $this = $(this),
+                    _options = $.extend({
+                        id      : options.id || $this.prop('id') || globalCheckboxId++,
+                        prop    : 'checked',
+                        selected: false,
+                        onChange: function(){}
+                    }, options);
+                $this.data('cbx_options', _options );
+                $this._cbxSet( _options.selected, true );
+                $this.on('click', $.proxy( $this._cbxOnClick, $this ));
+            });
+        },
 
-    $.fn._cbxSet = function( selected, dontCallOnChange ){ 
-        var options = this.data('cbx_options');
-        options.selected = !!selected;
-        this.data('cbx_options', options );
+        //Internal methods. All prefixed with _cbx
+        _cbxGet: function(){
+            return this.data('cbx_options').selected;
+        },
 
-        var $elements = options.selector ? this.children( options.selector ) : this;
-        $elements.each( function(){ 
-            var $this = $(this);
-            if (options.prop)
-                $this.prop(options.prop, options.selected);
-            if (options.className)
-                $this.toggleClass(options.className, options.selected);
-        });
+        _cbxSet: function( selected, dontCallOnChange ){ 
+            var options = this.data('cbx_options');
+            options.selected = !!selected;
+            this.data('cbx_options', options );
 
-        if (!dontCallOnChange)
-            this._cbxCallOnChange();          
-        return this;
-    };
+            var $elements = options.selector ? this.children( options.selector ) : this;
+            $elements.each( function(){ 
+                var $this = $(this);
+                if (options.prop)
+                    $this.prop(options.prop, options.selected);
+                if (options.className)
+                    $this.toggleClass(options.className, options.selected);
+            });
 
-    $.fn._cbxOnClick = function(){
-        var options = this.data('cbx_options');
-        return this._cbxSet( !options.selected );
-    };
+            if (!dontCallOnChange)
+                this._cbxCallOnChange();          
+            return this;
+        },
 
-    $.fn._cbxCallOnChange = function(){
-        var options = this.data('cbx_options');
-        if (options.onChange)
-            $.proxy( options.onChange, options.context )( 
-                options.id,
-                this._cbxGet(),
-                this 
-            );
-        if (options.postOnChange)
-            options.postOnChange();
-    };
+        _cbxOnClick: function(){
+            var options = this.data('cbx_options');
+            return this._cbxSet( !options.selected );
+        },
+
+        _cbxCallOnChange: function(){
+            var options = this.data('cbx_options');
+            if (options.onChange)
+                $.proxy( options.onChange, options.context )( 
+                    options.id,
+                    this._cbxGet(),
+                    this 
+                );
+            if (options.postOnChange)
+                options.postOnChange();
+        }
+
+    });
 
     /***********************************************************
     1) addElement( $element[, options])
@@ -113,8 +115,9 @@
             else
                 $element.each( function(){ 
                     _this._cbxChildList.push( $(this).checkbox( options ) );
+                    $(this).data('cbx_owner', _this );
                 });
-
+        
         return this;
     }
 
@@ -137,22 +140,6 @@
         selected, onChange: Same as for $.fn.checkbox but only used as default for child-checkboxes
         prop_semi, className_semi: Same as for $.fn.checkbox but for the semi-selected start where selected children > 0 and < total items        
     ***********************************************************/
-    $.fn.checkboxGroup = function(options) {
-        this.checkbox($.extend( {}, options, {
-                        onChange: this._cbxgOnClickParent,
-                        context : this
-                     })
-        );
-
-        this.defaultChildOptions = $.extend({
-            postOnChange: $.proxy( this._cbxgUpdateParent, this )            
-        }, options);
-        this.addElement = checkboxGroup_addElement;
-        this.removeElement = checkboxGroup_removeElement;
-        return this;
-    };
-
-
     //function checkboxGroup_addElement 
     function checkboxGroup_addElement(){
         _addElement.apply( this, arguments );     
@@ -167,45 +154,62 @@
         return this;
     }
 
-    //$.fn._cbxgUpdateParent = Update the state of the parent-checkbox
-    $.fn._cbxgUpdateParent = function(){
-        //Count the number of checked and unchecked children
-		var childSelected = 0,
-            childUnselected = 0;
-        $.each( this._cbxChildList, function( index, $child ){
-				if ($child._cbxGet())
-					childSelected++;
-				else
-					childUnselected++;
-        });
-        //Update selected and semi-selectd state
-        this._cbxSet( childSelected == this._cbxChildList.length, true );
-        var options = this.data('cbx_options'),
-            semiSelected = childSelected*childUnselected > 0;
+    $.fn.extend({
+        checkboxGroup: function(options) {
+            this.checkbox($.extend( {}, options, {
+                            onChange: this._cbxgOnClickParent,
+                            context : this
+                         })
+            );
 
-        if (options.prop_semi)
-            this.prop(options.prop_semi, semiSelected);
-        if (options.className_semi)
-            this.toggleClass(options.className_semi, semiSelected);
-    };
+            this.defaultChildOptions = $.extend({
+                postOnChange: $.proxy( this._cbxgUpdateParent, this )            
+            }, options);
+            this.addElement = checkboxGroup_addElement;
+            this.removeElement = checkboxGroup_removeElement;
+            return this;
+        },
 
-    //$.fn._cbxgOnClickParent = Click on parent 
-    $.fn._cbxgOnClickParent = function(){
-        //If all at least one child is selected => deselect all
-        //If all child is deselected => select all
-        var selected = true;
-        $.each( this._cbxChildList, function( index, $child ){
-            if ($child._cbxGet()){
-                selected = false;
-                return false;
-            }
-        });
-        $.each( this._cbxChildList, function( index, $child ){
-            if ($child._cbxGet() != selected) 
-                $child._cbxSet( selected ); 
-        });
-        this._cbxgUpdateParent();
-    };
+        //$.fn._cbxgUpdateParent = Update the state of the parent-checkbox
+        _cbxgUpdateParent: function(){
+            //Count the number of checked and unchecked children
+    		var childSelected = 0,
+                childUnselected = 0;
+            $.each( this._cbxChildList, function( index, $child ){
+    				if ($child._cbxGet())
+    					childSelected++;
+    				else
+    					childUnselected++;
+            });
+            //Update selected and semi-selectd state
+            this._cbxSet( childSelected == this._cbxChildList.length, true );
+            var options = this.data('cbx_options'),
+                semiSelected = childSelected*childUnselected > 0;
+
+            if (options.prop_semi)
+                this.prop(options.prop_semi, semiSelected);
+            if (options.className_semi)
+                this.toggleClass(options.className_semi, semiSelected);
+        },
+
+        //$.fn._cbxgOnClickParent = Click on parent 
+        _cbxgOnClickParent: function(){
+            //If all at least one child is selected => deselect all
+            //If all child is deselected => select all
+            var selected = true;
+            $.each( this._cbxChildList, function( index, $child ){
+                if ($child._cbxGet()){
+                    selected = false;
+                    return false;
+                }
+            });
+            $.each( this._cbxChildList, function( index, $child ){
+                if ($child._cbxGet() != selected) 
+                    $child._cbxSet( selected ); 
+            });
+            this._cbxgUpdateParent();
+        }
+    });
     
     
     /***********************************************************
