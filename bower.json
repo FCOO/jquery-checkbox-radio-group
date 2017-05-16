@@ -1,14 +1,13 @@
 {
   "name": "jquery-checkbox-radio-group",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "homepage": "https://github.com/FCOO/jquery-checkbox-radio-group",
   "authors": [
     "NielsHolt"
   ],
   "description": "",
   "main": [
-    "dist/jquery-checkbox-radio-group.js",
-    "dist/jquery-checkbox-radio-group.css"
+    "dist/jquery-checkbox-radio-group.js"
   ],
   "repository": {
     "type": "git",
