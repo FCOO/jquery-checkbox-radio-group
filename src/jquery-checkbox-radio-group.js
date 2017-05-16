@@ -87,7 +87,7 @@
                     this 
                 );
             if (options.postOnChange)
-                options.postOnChange();
+                options.postOnChange( this );
         }
 
     });
