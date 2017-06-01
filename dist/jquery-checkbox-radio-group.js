@@ -29,7 +29,7 @@
             return this.each(function() {        
                 var $this = $(this),
                     _options = $.extend({
-                        id       : options.id || $this.prop('id') || globalCheckboxId++,
+                        id       : options.id || $this.prop('id') || 'checkbox_' + globalCheckboxId++,
                         prop     : '',
                         className: '',
                         selector : null,
