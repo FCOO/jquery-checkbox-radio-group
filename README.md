@@ -54,6 +54,7 @@ As for `options.onChange` these options can be set *globally* in `$.fn.checkboxG
 | `radioGroupId` | String | `""` | 3 | Id for the group |
 | `selectedId` | String | `""` | 3 | The id of the select element |
 | `allowZeroSelected` | Boolean | `false` | 3 | If true the radio-buttons can be deselected |
+| `allowReselect` | Boolean | `false` | 3 | If true the  `onChange` will be called when a selected item is reselected/clicked |
 
 
 #### For...
