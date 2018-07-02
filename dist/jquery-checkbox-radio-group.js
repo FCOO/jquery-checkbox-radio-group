@@ -315,7 +315,7 @@
                 if (!dontCallOnChange){
                     childOptions.ownOnChange( childOptions.id, selected, $child, this.options.radioGroupId );
                     if (this.options.postOnChange)
-                        this.options.postOnChange( this );
+                        this.options.postOnChange( $child );
                 }
             }
             else
