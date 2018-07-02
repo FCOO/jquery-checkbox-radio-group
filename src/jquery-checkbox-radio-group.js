@@ -312,8 +312,11 @@
             //Only allow click on selected element if options.allowZeroSelected: true
             if (selected || this.options.allowZeroSelected){
                 $child._cbxSet( selected, true); //Update element
-                if (!dontCallOnChange)
+                if (!dontCallOnChange){
                     childOptions.ownOnChange( childOptions.id, selected, $child, this.options.radioGroupId );
+                    if (this.options.postOnChange)
+                        this.options.postOnChange( this );
+                }
             }
             else
                 //Select again
