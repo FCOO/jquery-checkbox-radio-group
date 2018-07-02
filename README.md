@@ -69,6 +69,9 @@ As for `options.onChange` these options can be set *globally* in `$.fn.checkboxG
     .addElement( array of $element[, options] ) //Add all $-elements in array
     .addElement( $element, seletor[, options] ) //Add $element.children( selector ) 
 
+### Setting a element selected or unselected
+	.setSelected(id, dontCallOnChange )
+	.setUnselected(id, dontCallOnChange ) //Only works correct on selected element/id
 
 ## Copyright and License
 This plugin is licensed under the [MIT license](https://github.com/FCOO/jquery-checkbox-radio-group/LICENSE).

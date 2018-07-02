@@ -30,25 +30,26 @@
 	<div class="test1">This is the first div</div>
 	<div class="test1">This is the second div</div>
     <hr>
-    <div id="parent">I am the parent</div>        
+    <div id="parent">I am the parent</div>
     <div id="container">
-    	<div id="no1">1</div>        
-    	<div id="no2">2</div>        
-    	<div id="no3">3</div>        
-    	<div id="no4">4</div>        
-    	<div id="no5">5</div>        
-    	<div id="no6">6</div>        
-    	<span id="no7">7 (special)</span>        
+    	<div id="no1">1</div>
+    	<div id="no2">2</div>
+    	<div id="no3">3</div>
+    	<div id="no4">4</div>
+    	<div id="no5">5</div>
+    	<div id="no6">6</div>
+    	<span id="no7">7 (special)</span>
     </div>
     <hr>
     <div id="radioGroup">
         <input type="radio" id="radio1" name="radio"/><label for="radio1">Radio id=radio1</label><br>
-        <input type="radio" id="radio2" name="radio"/><label for="radio2">Radio id=radio1</label><br>
-        <div id="radio3">Radio id=radio3</div>        
-        <div id="radio4">Radio id=radio4</div>        
-        <div id="radio5">Radio id=radio5 (special)</div>        
+        <input type="radio" id="radio2" name="radio"/><label for="radio2">Radio id=radio2</label><br>
+        <div id="radio3">Radio id=radio3</div>
+        <div id="radio4">Radio id=radio4</div>
+        <div id="radio5">Radio id=radio5 (special)</div>
     </div>
-
+    <button id="select5">Select "radio5"</button>
+    <button id="unselect5">Unselect "radio5 (no callback)"</button>
 	<script src="bower_components.js"></script>
 	<script src="../src/jquery-checkbox-radio-group.js"></script>
 	<script>
@@ -74,16 +75,21 @@
             });
 
         var radioGroup = $.radioGroup({
-            radioGroupId: 'myRadioGroup', className: 'i_am_selected', prop:'checked', allowZeroSelected: true, selectedId: 'radio3', 
+            radioGroupId: 'myRadioGroup', className: 'i_am_selected', prop:'checked', allowReselect: false, allowZeroSelected: true, selectedId: 'radio3',
             onChange: function(id, selected, $radio, groupId ){ console.log(groupId+':'+id+'=>'+selected); }
-        }); 
+        });
         radioGroup
             .addElement( $('input[type="radio"], #radio3, #radio4') )
             .addElement( $('#radio5'), {
                 onChange: function(id, selected){ console.log('I an special!', id,':',selected) }
             });
 
-    
+        $('#select5').on('click', function(){
+            radioGroup.setSelected('radio5');
+        });
+        $('#unselect5').on('click', function(){
+            radioGroup.setUnselected('radio5', true);
+        });
 
     </script>
 </body>
