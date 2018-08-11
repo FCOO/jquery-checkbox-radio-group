@@ -282,6 +282,18 @@
             return this;
         },
 
+        //_getSelectedChild: Return the selected $-element (if any)
+        _getSelectedChild: function( $exclude ){
+            var selectedList = $.grep(this._cbxChildList, function($elem){ return $elem._cbxGet() && (!$exclude || ($elem !== $exclude)); });
+            return selectedList.length ? selectedList[0] : null;
+        },
+
+        //getSelected: Return the id of the selected item (if any)
+        getSelected: function(){
+            var $selectedChild = this._getSelectedChild();
+            return $selectedChild ? $selectedChild.data('cbx_options').id : null;
+        },
+
         //setSelected: function(id, dontCallOnChange )
         setSelected: function(id, dontCallOnChange ){
             this.onChange(id, true, null, dontCallOnChange );
@@ -295,10 +307,11 @@
         //onChange: function(id, selected, dontCallOnChange )
         onChange: function(id, selected, dummy, dontCallOnChange ){
             //Find clicked child and other selected child
-            var $child               = $.grep(this._cbxChildList, function($elem){ return $elem.data('cbx_options').id == id; })[0],
-                childOptions         = $child.data('cbx_options'),
-                selectedList         = $.grep(this._cbxChildList, function($elem){ return $elem._cbxGet() && ($elem !== $child); }),
-                $selectedChild       = selectedList.length ? selectedList[0] : null,
+            var $child = $.grep(this._cbxChildList, function($elem){ return $elem.data('cbx_options').id == id; })[0];
+            if (!$child)
+                return;
+            var childOptions         = $child.data('cbx_options'),
+                $selectedChild       = this._getSelectedChild( $child ),
                 selectedChildOptions = $selectedChild ? $selectedChild.data('cbx_options') : null;
 
 
@@ -322,7 +335,6 @@
                 //Select again
                 $child._cbxSet( true, !this.options.allowReselect || dontCallOnChange);
         }
-
     };
 
     $.radioGroup = function( options ){
