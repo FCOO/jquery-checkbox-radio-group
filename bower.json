@@ -1,36 +1,36 @@
 {
-  "name": "jquery-checkbox-radio-group",
-  "version": "1.4.2",
-  "homepage": "https://github.com/FCOO/jquery-checkbox-radio-group",
-  "authors": [
-    "NielsHolt"
-  ],
-  "description": "",
-  "main": [
-    "dist/jquery-checkbox-radio-group.js"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/FCOO/jquery-checkbox-radio-group.git"
-  },
-  "dependencies": {
-    "jquery": "latest",
-    "modernizr-javascript": "https://github.com/FCOO/modernizr-javascript.git#^1.1.0"
-  },
-  "devDependencies": {
-    "bourbon": "latest",
-    "modernizr-mixin": "latest",
-    "mathsass": "latest"
-  },
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "moduleType": [
-    "es6"
-  ]
+    "name": "jquery-checkbox-radio-group",
+    "version": "1.4.2",
+    "homepage": "https://github.com/FCOO/jquery-checkbox-radio-group",
+    "authors": [
+        "NielsHolt"
+    ],
+    "description": "",
+    "main": [
+        "dist/jquery-checkbox-radio-group.js"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/FCOO/jquery-checkbox-radio-group.git"
+    },
+    "dependencies": {
+        "jquery": "latest",
+        "modernizr-javascript": "https://github.com/FCOO/modernizr-javascript.git#^1.1.0"
+    },
+    "devDependencies": {
+        "bourbon": "latest",
+        "modernizr-mixin": "latest",
+        "mathsass": "latest"
+    },
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "moduleType": [
+        "es6"
+    ]
 }

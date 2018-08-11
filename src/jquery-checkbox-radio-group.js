@@ -295,8 +295,10 @@
         //onChange: function(id, selected, dontCallOnChange )
         onChange: function(id, selected, dummy, dontCallOnChange ){
             //Find clicked child and other selected child
-            var $child               = $.grep(this._cbxChildList, function($elem){ return $elem.data('cbx_options').id == id; })[0],
-                childOptions         = $child.data('cbx_options'),
+            var $child               = $.grep(this._cbxChildList, function($elem){ return $elem.data('cbx_options').id == id; })[0];
+            if (!$child)
+                return;
+            var childOptions         = $child.data('cbx_options'),
                 selectedList         = $.grep(this._cbxChildList, function($elem){ return $elem._cbxGet() && ($elem !== $child); }),
                 $selectedChild       = selectedList.length ? selectedList[0] : null,
                 selectedChildOptions = $selectedChild ? $selectedChild.data('cbx_options') : null;
