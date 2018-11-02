@@ -8,7 +8,7 @@
 
 ****************************************************************************/
 
-(function ($/*, window, document, undefined*/) {
+(function ($, window, document, undefined) {
     "use strict";
 
     var globalCheckboxId = 0;
@@ -264,7 +264,7 @@
                 options.context = this;
                 $child.data('cbx_options', options);
             }
-            if (this.options.selectedId){
+            if (this.options.selectedId != undefined){
                 var _this = this,
                     list = $.grep(this._cbxChildList, function($elem){ return $elem.data('cbx_options').id == _this.options.selectedId; });
                 if (list.length){
