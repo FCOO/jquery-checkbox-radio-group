@@ -40,6 +40,8 @@
                 $this.data('cbx_options', _options );
                 $this._cbxSet( _options.selected, true );
                 $this.on('click', $.proxy( $this._cbxOnClick, $this ));
+                if (options.onDblClick)
+                    $this.on('dblclick', $.proxy($this._cbxCallDblClick, $this));
             });
         },
 
@@ -88,8 +90,17 @@
                 );
             if (options.postOnChange)
                 options.postOnChange( this );
-        }
+        },
 
+        _cbxCallDblClick: function(){
+            var options = this.data('cbx_options');
+            if (options.onDblClick)
+                $.proxy( options.onDblClick, options.context )(
+                    options.id,
+                    this._cbxGet(),
+                    this
+                );
+        }
     });
 
     /***********************************************************
