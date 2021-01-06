@@ -17,13 +17,15 @@
         /***********************************************************
         $.fn.checkbox( options )
         options:
-            id         (default: id of element or auto-created)
-            prop       (default '')     Property set when the eleemnt is selected
-            className  (default: '')    Class-name set when the eleemnt is selected
-            selector   (default: null)  Selector for child-element to be updated with prop and/or className
-            modernizr  (default; false) If true the element get "no-"+className when unselected
-            selected   (default: false)
-            onChange = function( id, selected, $checkbox )
+            id              (default: id of element or auto-created)
+            prop            (default '')     Property set when the element is selected
+            className       (default: '')    Class-name set when the element is selected
+            className_semi  (default: '')    Class-name set when the element is semi-selected
+            selector        (default: null)  Selector for child-element to be updated with prop and/or className
+            modernizr       (default; false) If true the element get "no-"+className when unselected
+            selected        (default: false)
+            semiSelected    (default: false) If true the checkbox appear with className_semi and selected. Will be removed the first time the input is clicked
+            onChange        = function( id, selected, $checkbox )
         ***********************************************************/
         checkbox: function( options ){
             return this.each(function() {
@@ -38,7 +40,15 @@
                         onChange : function(){}
                     }, options);
                 $this.data('cbx_options', _options );
+
+
+                if (options.className_semi && options.semiSelected){
+                    _options.selected = true;
+                    $this.addClass(options.className_semi);
+                }
+
                 $this._cbxSet( _options.selected, true );
+
                 $this.on('click', $.proxy( $this._cbxOnClick, $this ));
                 if (options.onDblClick)
                     $this.on('dblclick', $.proxy($this._cbxCallDblClick, $this));
@@ -70,8 +80,10 @@
 
             });
 
-            if (!dontCallOnChange)
+            if (!dontCallOnChange){
+                this.removeClass(options.className_semi);
                 this._cbxCallOnChange();
+            }
             return this;
         },
 
