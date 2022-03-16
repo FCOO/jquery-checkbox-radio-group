@@ -41,6 +41,8 @@
                     }, options);
                 $this.data('cbx_options', _options );
 
+                if (options.getSelected)
+                    _options.selected = options.getSelected.apply( options.getSelectedContext, [this, _options] );
 
                 if (options.className_semi && options.semiSelected){
                     _options.selected = true;
