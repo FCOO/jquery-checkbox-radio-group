@@ -41,13 +41,10 @@
                     }, options);
                 $this.data('cbx_options', _options );
 
+                if (options.getSelected)
+                    _options.selected = options.getSelected.apply( options.getSelectedContext, [this, _options] );
 
-                if (options.className_semi && options.semiSelected){
-                    _options.selected = true;
-                    $this.addClass(options.className_semi);
-                }
-
-                $this._cbxSet( _options.selected, true );
+                $this._cbxSet( _options.selected, true, options.className_semi && options.semiSelected );
 
                 $this.on('click', $.proxy( $this._cbxOnClick, $this ));
                 if (options.onDblClick)
@@ -60,7 +57,7 @@
             return this.data('cbx_options').selected;
         },
 
-        _cbxSet: function( selected, dontCallOnChange ){
+        _cbxSet: function( selected, dontCallOnChange, semiSelected ){
             var options = this.data('cbx_options');
             options.selected = !!selected;
             this.data('cbx_options', options );
@@ -80,16 +77,18 @@
 
             });
 
-            if (!dontCallOnChange){
-                this.removeClass(options.className_semi);
+            if (typeof semiSelected == 'boolean')
+                this.toggleClass(options.className_semi, semiSelected);
+
+            if (!dontCallOnChange)
                 this._cbxCallOnChange();
-            }
+
             return this;
         },
 
         _cbxOnClick: function(){
             var options = this.data('cbx_options');
-            return this._cbxSet( !options.selected );
+            return this._cbxSet( !options.selected, false, false );
         },
 
         _cbxCallOnChange: function(){
@@ -215,9 +214,9 @@
                     childUnselected++;
             });
             //Update selected and semi-selectd state
-            this._cbxSet( childSelected == this._cbxChildList.length, true );
             var options = this.data('cbx_options'),
                 semiSelected = childSelected*childUnselected > 0;
+            this._cbxSet( childSelected == this._cbxChildList.length, true, semiSelected );
 
             if (options.prop_semi)
                 this.prop(options.prop_semi, semiSelected);
@@ -317,9 +316,9 @@
             return $selectedChild ? $selectedChild.data('cbx_options').id : null;
         },
 
-        //setSelected: function(id, dontCallOnChange )
-        setSelected: function(id, dontCallOnChange ){
-            this.onChange(id, true, null, dontCallOnChange );
+        //setSelected: function(id, dontCallOnChange, semiSelected )
+        setSelected: function(id, dontCallOnChange, semiSelected ){
+            this.onChange(id, true, null, dontCallOnChange, semiSelected );
         },
 
         //setUnselected: function(id, dontCallOnChange )
@@ -327,8 +326,8 @@
             this.onChange(id, false, null, dontCallOnChange );
         },
 
-        //onChange: function(id, selected, dontCallOnChange )
-        onChange: function(id, selected, dummy, dontCallOnChange ){
+        //onChange: function(id, selected, dummy, dontCallOnChange, semiSelected )
+        onChange: function(id, selected, dummy, dontCallOnChange, semiSelected ){
             //Find clicked child and other selected child
             var $child = $.grep(this._cbxChildList, function($elem){ return $elem.data('cbx_options').id == id; })[0];
             if (!$child)
@@ -340,14 +339,14 @@
 
             //Unselect the selected child
             if ($selectedChild){
-                $selectedChild._cbxSet( false, true );
+                $selectedChild._cbxSet( false, true, false );
                 if (this.options.allowZeroSelected)
                     selectedChildOptions.ownOnChange( selectedChildOptions.id, false, $selectedChild, this.options.radioGroupId );
             }
 
             //Only allow click on selected element if options.allowZeroSelected: true
             if (selected || this.options.allowZeroSelected){
-                $child._cbxSet( selected, true); //Update element
+                $child._cbxSet( selected, true, semiSelected);//Update element
                 if (!dontCallOnChange){
                     childOptions.ownOnChange( childOptions.id, selected, $child, this.options.radioGroupId );
                     if (this.options.postOnChange)
@@ -356,7 +355,7 @@
             }
             else
                 //Select again
-                $child._cbxSet( true, !this.options.allowReselect || dontCallOnChange);
+                $child._cbxSet( true, !this.options.allowReselect || dontCallOnChange, semiSelected );
         }
     };
 
