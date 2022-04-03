@@ -34,6 +34,7 @@
                         id       : options.id || $this.prop('id') || 'checkbox_' + globalCheckboxId++,
                         prop     : '',
                         className: '',
+                        className_semi: '',
                         selector : null,
                         modernizr: false,
                         selected : false,
@@ -79,7 +80,7 @@
             if (typeof semiSelected == 'boolean'){
                 this.toggleClass(options.className_semi, semiSelected);
                 options.semiSelected = semiSelected;
-                options.semiSelectedValue = semiSelectedValue || options.semiSelectedValue || 'SEMI-NILLER';
+                options.semiSelectedValue = semiSelectedValue || options.semiSelectedValue || 'semi';
             }
 
             this.data('cbx_options', options );
