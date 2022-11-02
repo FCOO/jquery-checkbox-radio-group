@@ -60,6 +60,11 @@
 
         _cbxSet: function( selected, dontCallOnChange, semiSelected, semiSelectedValue ){
             var options = this.data('cbx_options');
+
+            //Allow selected to be a function
+            if (typeof selected === "function")
+                selected = selected();
+
             options.selected = !!selected;
 
             var $elements = options.selector ? this.children( options.selector ) : this;
